@@ -25,6 +25,7 @@
 
   var dataMedicos;
 
+  var table = null;
 
   //Monta URL de consulta
 
@@ -125,8 +126,63 @@
     };
 
   //
-        // função mostra Resultados da consulta de medicos
+        // função monta a tabela de Resultados da consulta de medicos
   //
+
+  function limpeza(){
+
+    // Limpando variaveis
+    //
+        $palavrachave = null;
+        $strnome = null;
+        $vlenome = null;
+        $strcidade = null;
+        $vlecidade = null;
+        $strespecialidade = null;
+        $vleespecialidade = null;
+
+        $("#resultados tr").slice(0).remove();
+  };
+  function makeTableRes(container, dataMedicos) {
+
+
+
+      limpeza();
+
+
+    var table = $("<table"+" id="+ '"resultados"'+"/>").addClass('CSSTableGenerator');
+
+    $.each(dataMedicos, function(rowIndex, medicos) {
+        var row = $("<tr/>");
+        $.each(medicos, function(colIndex, c) {
+            row.append($("<t"+(colIndex == 0 ?  "h" : "d")+"/>").text(c));
+        });
+        table.append(row);
+    });
+        return container.append(table);
+
+
+//    var tabres = document.getElementById("resultados")
+//    var titleLin = tabres.insertRow();
+//    var titleCel = titleLin.insertCell();
+//    var titleTit = 'Resultados';
+//    titleCel.append(titleTit);
+
+
+//    $.each(dataMedicos, function(i, medicos){
+//      var lin = tabres.insertRow();
+//      var cel = lin.insertCell();
+//      var nmed = medicos.nome;
+//      cel.append(nmed);
+//    console.log(medicos.nome, medicos.id);
+//    });
+
+  }
+
+//
+      // função mostra Resultados da consulta de medicos
+//
+
         function insereResultados(){
   //
         // captura a palavra chave
@@ -145,17 +201,15 @@
                 type: 'GET',
                 url: $dataselect,
                 success: function (dataMedicos) {
+                  console.log(dataMedicos);
+  //                var medParse = JSON.parse(dataMedicos);
+  //                for (var i = 0; i < dataMedicos.length; i++) {
+  //                var medNome = dataMedicos.nome[i];
+  //                console.log(medNome);
+//                  }
+                  var tableMedicos = makeTableRes($(document.body), dataMedicos);
 
-                  $("#resultados tr:gt(0)").remove();
 
-                  var tabres = document.getElementById("resultados")
-                  $.each(dataMedicos, function(i, medicos){
-                    var lin = tabres.insertRow();
-                    var cel = lin.insertCell();
-                    var nmed = medicos.nome;
-                    cel.append(nmed);
-                  console.log(medicos.nome, medicos.id);
-                  });
                 },
                 error: function(){
                   alert('errorloading Lista Medicos');
@@ -167,19 +221,7 @@
 $(function() {
 
 
-function limpeza(){
 
-  // Limpando variaveis
-  //
-      $palavrachave = null;
-      $strnome = null;
-      $vlenome = null;
-      $strcidade = null;
-      $vlecidade = null;
-      $strespecialidade = null;
-      $vleespecialidade = null;
-
-};
 
 
   //carga inicial dos nomes dos médicos para seleção
